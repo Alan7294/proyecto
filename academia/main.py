@@ -34,3 +34,4 @@ app.include_router(administrador.router, prefix="/administrador", tags=["Adminis
 app.include_router(carrera.router, prefix="/carrera", tags=["Carrera"])
 app.include_router(especialidad.router, prefix="/especialidad", tags=["Especialidad"])
 app.include_router(usuario.router, prefix="/usuario", tags=["Usuario"])
+print ("hola mundo")
