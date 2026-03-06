@@ -66,6 +66,7 @@ async def insertar_inscripcion(inscripcion: Inscripcion, conn=Depends(get_conexi
 
 @router.put("/{id_inscripcion}")
 async def actualizar_inscripcion(id_inscripcion: int, inscripcion: Inscripcion, conn=Depends(get_conexion)):
+    print ("actualizando inscripcion")
     consulta = """
         UPDATE inscripcion
         SET id_alumno = %s, id_clase = %s, fecha_inscripcion = %s
