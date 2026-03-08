@@ -18,14 +18,12 @@ class Alumno(BaseModel):
 async def reporte_alumnos(conn=Depends(get_conexion)):
     consulta = """
         SELECT a.id_alumno,
-               p.id_persona,
-               p.nombre,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
                p.ci,
                p.correo,
                p.fecha_nacimiento,
-               a.carrera_alumno,
                c.nombre_carrera
 
         FROM alumno a
@@ -45,35 +43,32 @@ async def reporte_alumnos(conn=Depends(get_conexion)):
         raise HTTPException(status_code=400, detail="Error al generar reporte de alumnos")
 
 @router.get("/infoAlumnos/{id_alumno}")
-async def reporte_alumnos(id_alumno: int, conn=Depends(get_conexion)):
+async def reporte_alumno_por_id(id_alumno: int, conn=Depends(get_conexion)):
     consulta = """
         SELECT a.id_alumno,
-               p.id_persona,
-               p.nombre,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
                p.ci,
                p.correo,
                p.fecha_nacimiento,
-               a.carrera_alumno,
                c.nombre_carrera
-
         FROM alumno a
         INNER JOIN persona p ON a.id_persona = p.id_persona
         INNER JOIN carrera c ON a.carrera_alumno = c.id_carrera
-        ORDER BY a.id_alumno
+        WHERE a.id_alumno = %s
     """
     try:
         async with conn.cursor() as cursor:
-            await cursor.execute(consulta)
-            reporte = await cursor.fetchall()
-            if not reporte:
-                return {"mensaje": "No hay alumnos registrados en el reporte"}
-            return reporte
+            await cursor.execute(consulta, (id_alumno,))
+            alumno = await cursor.fetchone()
+            if not alumno:
+                raise HTTPException(status_code=404, detail="Alumno no encontrado")
+            return alumno
     except Exception as e:
-        print(f"Error al generar reporte de alumnos: {e}")
-        raise HTTPException(status_code=400, detail="Error al generar reporte de alumnos")
-    
+        print(f"Error al consultar alumno por id: {e}")
+        raise HTTPException(status_code=400, detail="Error al consultar alumno")
+  
 @router.get("/")
 async def listar_alumnos(conn=Depends(get_conexion)):
     consulta = """

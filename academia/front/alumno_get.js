@@ -7,14 +7,9 @@ const CargaData = (datos) => {
     for (let i = 0; i < datos.length; i++) {
         resultado += `
         <li>
-            <p>ID: ${datos[i].id_alumno}</p>
-            <p>Nombre: ${datos[i].nombre}</p>
-            <p>Apellido paterno: ${datos[i].apellido_pat}</p>
-            <p>Apellido materno: ${datos[i].apellido_mat}</p>
-            <p>CI: ${datos[i].ci}</p>
-            <p>Correo: ${datos[i].correo}</p>
-            <p>Fecha nacimiento: ${datos[i].fecha_nacimiento}</p>
-            <p>Carrera: ${datos[i].carrera_alumno}</p>
+            <p>id Alumno: ${datos[i].id_alumno}</p>
+            <p>id Persona: ${datos[i].id_persona}</p>
+            <p>id carrera: ${datos[i].carrera_alumno}</p>
             <hr>
         </li>
         `

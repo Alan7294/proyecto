@@ -17,8 +17,7 @@ class Administrador(BaseModel):
 async def reporte_administradores(conn=Depends(get_conexion)):
     consulta = """
         SELECT a.id_admin,
-               p.id_persona,
-               p.nombre,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
                p.ci,
@@ -38,6 +37,31 @@ async def reporte_administradores(conn=Depends(get_conexion)):
     except Exception as e:
         print(f"Error al generar reporte de administradores: {e}")
         raise HTTPException(status_code=400, detail="Error al generar reporte de administradores")
+
+@router.get("/infoAdministradores/{id_admin}")
+async def reporte_administrador_por_id(id_admin: int, conn=Depends(get_conexion)):
+    consulta = """
+        SELECT a.id_admin,
+               p.nombre_persona,
+               p.apellido_pat,
+               p.apellido_mat,
+               p.ci,
+               p.correo,
+               p.fecha_nacimiento
+        FROM administrador a
+        INNER JOIN persona p ON a.id_persona = p.id_persona
+        WHERE a.id_admin = %s
+    """
+    try:
+        async with conn.cursor() as cursor:
+            await cursor.execute(consulta, (id_admin,))
+            administrador = await cursor.fetchone()
+            if not administrador:
+                raise HTTPException(status_code=404, detail="Administrador no encontrado")
+            return administrador
+    except Exception as e:
+        print(f"Error al consultar administrador por id: {e}")
+        raise HTTPException(status_code=400, detail="Error al consultar administrador")
 
 @router.get("/")
 async def listar_administradores(conn=Depends(get_conexion)):

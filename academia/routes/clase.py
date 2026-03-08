@@ -15,10 +15,78 @@ class Clase(BaseModel):
     id_docente: int
     periodo: str
 
+@router.get("/reporte")
+async def reporte_clases(conn=Depends(get_conexion)):
+    consulta = """
+        SELECT 
+            c.id_clase,
+            m.nombre_materia,
+            d.id_docente,
+            p.nombre_persona,
+            p.apellido_pat,
+            p.apellido_mat,
+            e.nombre_especialidad,
+            t.nombre_turno
+
+        FROM clase c
+        inner join turno t on c.id_turno = t.id_turno
+        INNER JOIN materia m ON c.id_materia = m.id_materia
+        INNER JOIN docente d ON c.id_docente = d.id_docente
+        INNER JOIN persona p ON d.id_persona = p.id_persona
+        INNER JOIN especialidad e ON d.id_especialidad = e.id_especialidad
+        ORDER BY c.id_clase
+    """
+    try:
+        async with conn.cursor() as cursor:
+            await cursor.execute(consulta)
+            reporte = await cursor.fetchall()
+            if not reporte:
+                return {"mensaje": "No hay clases registradas en el reporte"}
+            return reporte
+    except Exception as e:
+        print(f"Error al generar reporte: {e}")
+        raise HTTPException(status_code=400, detail="Error al generar reporte")
+
+@router.get("/infoClase/{id_clase}")
+async def reporte_clase_por_id(id_clase: int, conn=Depends(get_conexion)):
+    consulta = """
+        SELECT 
+            c.id_clase,
+            m.nombre_materia,
+            d.id_docente,
+            p.nombre_persona,
+            p.apellido_pat,
+            p.apellido_mat,
+            e.nombre_especialidad,
+            t.nombre_turno
+
+        FROM clase c
+        INNER JOIN turno t ON c.id_turno = t.id_turno
+        INNER JOIN materia m ON c.id_materia = m.id_materia
+        INNER JOIN docente d ON c.id_docente = d.id_docente
+        INNER JOIN persona p ON d.id_persona = p.id_persona
+        INNER JOIN especialidad e ON d.id_especialidad = e.id_especialidad
+        WHERE c.id_clase = %s
+    """
+    try:
+        async with conn.cursor() as cursor:
+            await cursor.execute(consulta, (id_clase,))
+            clase = await cursor.fetchone()
+            if not clase:
+                raise HTTPException(status_code=404, detail="Clase no encontrada")
+            return clase
+    except Exception as e:
+        print(f"Error al consultar clase por id: {e}")
+        raise HTTPException(status_code=400, detail="Error al consultar clase")
+    
+
 @router.get("/")
 async def listar_clases(conn=Depends(get_conexion)):
     consulta = """
-        SELECT id_clase, id_materia, id_docente, periodo
+        SELECT id_clase,
+        id_materia,
+        id_docente,
+        periodo
         FROM clase
         ORDER BY id_clase
     """

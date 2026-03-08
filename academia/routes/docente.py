@@ -19,7 +19,7 @@ async def reporte_docentes(conn=Depends(get_conexion)):
     consulta = """
         SELECT d.id_docente,
                p.id_persona,
-               p.nombre,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
                p.ci,
@@ -44,35 +44,33 @@ async def reporte_docentes(conn=Depends(get_conexion)):
         print(f"Error al generar reporte de docentes: {e}")
         raise HTTPException(status_code=400, detail="Error al generar reporte de docentes")
 
-@router.get("/infoDocentes/{id_docente}")
-async def reporte_docentes(id_docente: int, conn=Depends(get_conexion)):
+@router.get("/infoDocente/{id_docente}")
+async def reporte_docente_por_id(id_docente: int, conn=Depends(get_conexion)):
     consulta = """
         SELECT d.id_docente,
-               p.id_persona,
-               p.nombre,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
                p.ci,
                p.correo,
                p.fecha_nacimiento,
-               d.id_especialidad,
                e.nombre_especialidad
 
         FROM docente d
         INNER JOIN persona p ON d.id_persona = p.id_persona
         INNER JOIN especialidad e ON d.id_especialidad = e.id_especialidad
-        ORDER BY d.id_docente
+        WHERE d.id_docente = %s
     """
     try:
         async with conn.cursor() as cursor:
-            await cursor.execute(consulta)
-            reporte = await cursor.fetchall()
-            if not reporte:
-                return {"mensaje": "No hay docentes registrados en el reporte"}
-            return reporte
+            await cursor.execute(consulta, (id_docente,))
+            Docente = await cursor.fetchone()
+            if not Docente:
+                raise HTTPException(status_code=404, detail="Docente no encontrado")
+            return Docente
     except Exception as e:
-        print(f"Error al generar reporte de docentes: {e}")
-        raise HTTPException(status_code=400, detail="Error al generar reporte de docentes")
+        print(f"Error al consultar docente por id: {e}")
+        raise HTTPException(status_code=400, detail="Error al consultar docente")
     
 @router.get("/")
 async def listar_docentes(conn=Depends(get_conexion)):

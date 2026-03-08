@@ -11,17 +11,17 @@ app = FastAPI()
 router = APIRouter()
 
 class Persona(BaseModel):
-    nombre: str
+    nombre_persona: str
     apellido_pat: str
-    apellido_mat: str | None = None
+    apellido_mat: str
     ci: int
     correo: str
-    fecha_nacimiento: str | None = None   # opcional
+    fecha_nacimiento: str
 
 @router.get("/")
 async def listar_personas(conn=Depends(get_conexion)):
     consulta = """
-        SELECT id_persona, nombre, apellido_pat, apellido_mat, ci,
+        SELECT id_persona, nombre_persona, apellido_pat, apellido_mat, ci,
                correo, fecha_nacimiento
         FROM persona
         ORDER BY id_persona
@@ -40,7 +40,7 @@ async def listar_personas(conn=Depends(get_conexion)):
 @router.get("/{id_persona}")
 async def obtener_persona(id_persona: int, conn=Depends(get_conexion)):
     consulta = """
-        SELECT id_persona, nombre, apellido_pat, apellido_mat, ci,
+        SELECT id_persona, nombre_persona, apellido_pat, apellido_mat, ci,
                correo, fecha_nacimiento
         FROM persona
         WHERE id_persona = %s
@@ -59,12 +59,12 @@ async def obtener_persona(id_persona: int, conn=Depends(get_conexion)):
 @router.post("/")
 async def insertar_persona(persona: Persona, conn=Depends(get_conexion)):
     consulta = """
-        INSERT INTO persona(nombre, apellido_pat, apellido_mat, ci, correo, fecha_nacimiento)
+        INSERT INTO persona(nombre_persona, apellido_pat, apellido_mat, ci, correo, fecha_nacimiento)
         VALUES (%s, %s, %s, %s, %s, %s)
         RETURNING id_persona
     """
     parametros = (
-        persona.nombre,
+        persona.nombre_persona,
         persona.apellido_pat,
         persona.apellido_mat,
         persona.ci,
@@ -85,7 +85,7 @@ async def insertar_persona(persona: Persona, conn=Depends(get_conexion)):
 async def actualizar_persona(id_persona: int, persona: Persona, conn=Depends(get_conexion)):
     consulta = """
         UPDATE persona
-        SET nombre = %s,
+        SET nombre_persona = %s,
             apellido_pat = %s,
             apellido_mat = %s,
             ci = %s,
@@ -95,7 +95,7 @@ async def actualizar_persona(id_persona: int, persona: Persona, conn=Depends(get
         RETURNING id_persona
     """
     parametros = (
-        persona.nombre,
+        persona.nombre_persona,
         persona.apellido_pat,
         persona.apellido_mat,
         persona.ci,

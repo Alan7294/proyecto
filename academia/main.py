@@ -11,6 +11,7 @@ from routes import carrera
 from routes import especialidad
 from routes import usuario
 from routes import persona
+from routes import turno
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -34,3 +35,4 @@ app.include_router(administrador.router, prefix="/administrador", tags=["Adminis
 app.include_router(carrera.router, prefix="/carrera", tags=["Carrera"])
 app.include_router(especialidad.router, prefix="/especialidad", tags=["Especialidad"])
 app.include_router(usuario.router, prefix="/usuario", tags=["Usuario"])
+app.include_router(turno.router, prefix="/turno", tags=["Turno"])

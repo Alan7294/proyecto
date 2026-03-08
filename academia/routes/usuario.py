@@ -12,7 +12,7 @@ router = APIRouter()
 
 class Usuario(BaseModel):
     id_persona: int
-    nombre: str
+    nombre_usuario: str
     contraseña: str
     id_tipo: int
 
@@ -20,18 +20,15 @@ class Usuario(BaseModel):
 async def reporte_usuarios(conn=Depends(get_conexion)):
     consulta = """
         SELECT u.id_usuario,
-               p.id_persona,
-               p.nombre AS nombre_persona,
+               p.nombre_persona,
                p.apellido_pat,
                p.apellido_mat,
-               p.ci,
-               p.correo,
-               p.fecha_nacimiento,
-               u.nombre AS nombre_usuario,
+               u.nombre_usuario,
                u.contraseña,
-               u.id_tipo
+               tu.nombre_tipo
         FROM usuario u
         INNER JOIN persona p ON u.id_persona = p.id_persona
+        INNER JOIN tipo_usuario tu ON u.id_tipo = tu.id_tipo
         ORDER BY u.id_usuario
     """
     try:
@@ -45,10 +42,36 @@ async def reporte_usuarios(conn=Depends(get_conexion)):
         print(f"Error al generar reporte de usuarios: {e}")
         raise HTTPException(status_code=400, detail="Error al generar reporte de usuarios")
 
+@router.get("/infoUsuarios/{id_usuario}")
+async def reporte_usuario_por_id(id_usuario: int, conn=Depends(get_conexion)):
+    consulta = """
+        SELECT u.id_usuario,
+               p.nombre_persona,
+               p.apellido_pat,
+               p.apellido_mat,
+               u.nombre_usuario,
+               u.contraseña,
+               tu.nombre_tipo
+        FROM usuario u
+        INNER JOIN tipo_usuario tu ON u.id_tipo = tu.id_tipo
+        INNER JOIN persona p ON u.id_persona = p.id_persona
+        WHERE u.id_usuario = %s
+    """
+    try:
+        async with conn.cursor() as cursor:
+            await cursor.execute(consulta, (id_usuario,))
+            usuario = await cursor.fetchone()
+            if not usuario:
+                raise HTTPException(status_code=404, detail="Usuario no encontrado")
+            return usuario
+    except Exception as e:
+        print(f"Error al consultar administrador por id: {e}")
+        raise HTTPException(status_code=400, detail="Error al consultar administrador")
+
 @router.get("/")
 async def listar_usuarios(conn=Depends(get_conexion)):
     consulta = """
-        SELECT id_usuario, id_persona, nombre, contraseña, id_tipo
+        SELECT id_usuario, id_persona, nombre_usuario, contraseña, id_tipo
         FROM usuario
         ORDER BY id_usuario
     """
@@ -66,7 +89,7 @@ async def listar_usuarios(conn=Depends(get_conexion)):
 @router.get("/{id_usuario}")
 async def obtener_usuario(id_usuario: int, conn=Depends(get_conexion)):
     consulta = """
-        SELECT id_usuario, id_persona, nombre, contraseña, id_tipo
+        SELECT id_usuario, id_persona, nombre_usuario, contraseña, id_tipo
         FROM usuario
         WHERE id_usuario = %s
     """
@@ -84,11 +107,16 @@ async def obtener_usuario(id_usuario: int, conn=Depends(get_conexion)):
 @router.post("/")
 async def insertar_usuario(usuario: Usuario, conn=Depends(get_conexion)):
     consulta = """
-        INSERT INTO usuario(id_persona, nombre, contraseña, id_tipo)
+        INSERT INTO usuario(id_persona, nombre_usuario, contraseña, id_tipo)
         VALUES (%s, %s, %s, %s)
         RETURNING id_usuario
     """
-    parametros = (usuario.id_persona, usuario.nombre, usuario.contraseña, usuario.id_tipo)
+    parametros = (
+        usuario.id_persona,
+        usuario.nombre_usuario,
+        usuario.contraseña,
+        usuario.id_tipo
+    )
     try:
         async with conn.cursor() as cursor:
             await cursor.execute(consulta, parametros)
@@ -104,13 +132,19 @@ async def actualizar_usuario(id_usuario: int, usuario: Usuario, conn=Depends(get
     consulta = """
         UPDATE usuario
         SET id_persona = %s,
-            nombre = %s,
+            nombre_usuario = %s,
             contraseña = %s,
             id_tipo = %s
         WHERE id_usuario = %s
         RETURNING id_usuario
     """
-    parametros = (usuario.id_persona, usuario.nombre, usuario.contraseña, usuario.id_tipo, id_usuario)
+    parametros = (
+        usuario.id_persona,
+        usuario.nombre_usuario,
+        usuario.contraseña,
+        usuario.id_tipo,
+        id_usuario
+    )
     try:
         async with conn.cursor() as cursor:
             await cursor.execute(consulta, parametros)
