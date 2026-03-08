@@ -13,9 +13,14 @@ CREATE TABLE tipo_usuario (
     nombre_tipo VARCHAR(50) UNIQUE NOT NULL
 );
 
+CREATE TABLE turno (
+	id_turno INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	nombre_turno varchar (50) NOT NULL
+);
+
 CREATE TABLE persona (
     id_persona INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
+    nombre_persona VARCHAR(50) NOT NULL,
     apellido_pat VARCHAR(50) NOT NULL,
     apellido_mat VARCHAR(50),
     ci INT UNIQUE NOT NULL,
@@ -37,7 +42,7 @@ CREATE TABLE docente (
 
 CREATE TABLE materia (
     id_materia INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
+    nombre_materia VARCHAR(50) NOT NULL,
     descripcion TEXT
 );
 
@@ -45,6 +50,7 @@ CREATE TABLE clase (
     id_clase INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_materia INT NOT NULL REFERENCES materia(id_materia) ON DELETE CASCADE,
     id_docente INT NOT NULL REFERENCES docente(id_docente) ON DELETE CASCADE,
+	id_turno INT NOT NULL REFERENCES turno(id_turno) ON DELETE CASCADE,
     periodo VARCHAR(20) NOT NULL
 );
 
@@ -71,7 +77,7 @@ CREATE TABLE administrador (
 CREATE TABLE usuario (
     id_usuario INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     id_persona INT NOT NULL REFERENCES persona(id_persona) ON DELETE CASCADE,
-    nombre VARCHAR(50) NOT NULL,
+    nombre_usuario VARCHAR(50) NOT NULL,
     contraseña VARCHAR(50) NOT NULL,
     id_tipo INT NOT NULL REFERENCES tipo_usuario(id_tipo) ON DELETE CASCADE
 );
@@ -95,7 +101,12 @@ INSERT INTO tipo_usuario (nombre_tipo) VALUES
 ('Docente'),
 ('Administrador');
 
-INSERT INTO persona (nombre, apellido_pat, apellido_mat, ci, correo, fecha_nacimiento) VALUES
+INSERT INTO turno (nombre_turno) VALUES
+('Mañana'),
+('Tarde'),
+('Noche');
+
+INSERT INTO persona (nombre_persona, apellido_pat, apellido_mat, ci, correo, fecha_nacimiento) VALUES
 ('Alan', 'Laura', 'Paz', 13376354, 'lauraalan@gmail.com', '2000-07-15'),
 ('Jorge', 'Mamani', 'Quispe', 12345678, 'jorge.mamani@gmail.com', '1999-05-20'),
 ('Diego', 'Quito', 'Flores', 87654321, 'diego.qflores@gmail.com', '2001-03-10'),
@@ -126,19 +137,19 @@ INSERT INTO docente (id_persona, id_especialidad) VALUES
 (9, 4),
 (10, 5);
 
-INSERT INTO materia (nombre, descripcion) VALUES
+INSERT INTO materia (nombre_materia, descripcion) VALUES
 ('Matemáticas I', 'Curso básico de álgebra y cálculo'),
 ('Programación I', 'Introducción a la programación en C'),
 ('Derecho Civil', 'Fundamentos del derecho civil'),
 ('Arquitectura Moderna', 'Diseño arquitectónico contemporáneo'),
 ('Biología General', 'Principios básicos de biología');
 
-INSERT INTO clase (id_materia, id_docente, periodo) VALUES
-(1, 2, '2026-1'),
-(2, 1, '2026-1'),
-(3, 3, '2026-1'),
-(4, 4, '2026-1'),
-(5, 5, '2026-1');
+INSERT INTO clase (id_materia, id_docente, id_turno, periodo) VALUES
+(1, 2, 2, '2026-1'),
+(2, 1, 1, '2026-1'),
+(3, 3, 3, '2026-1'),
+(4, 4, 3, '2026-1'),
+(5, 5, 1, '2026-1');
 
 INSERT INTO inscripcion (id_alumno, id_clase) VALUES
 (1, 1),
@@ -161,13 +172,14 @@ INSERT INTO administrador (id_persona) VALUES
 (14),
 (15);
 
-INSERT INTO usuario (id_persona, nombre, contraseña, id_tipo) VALUES
+INSERT INTO usuario (id_persona, nombre_usuario, contraseña, id_tipo) VALUES
 (1, 'AlanLaura', '7294', 1),
 (2, 'JorgeMamani', '3816', 1),
 (3, 'DiegoQuito', '4862', 2),
 (11, 'EliasLuna', '1234', 3),
 (4, 'MariaSoto', '5678', 1);
 
+SELECT * FROM persona;
 SELECT * FROM alumno;
 SELECT * FROM docente;
 SELECT * FROM materia;
