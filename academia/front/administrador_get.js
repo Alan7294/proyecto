@@ -1,27 +1,60 @@
 const url = "http://127.0.0.1:8000/administrador"
-const contenedor = document.getElementById('data')
 
-const CargaData = (datos) => {
-    let resultado = ""
+async function cargarAdministradores(){
 
-    for (let i = 0; i < datos.length; i++) {
-        resultado += `
-        <li>
-            <p>id persona: ${datos[i].id_admin}</p>
-            <p>id administrador: ${datos[i].id_persona}</p>
-            <hr>
-        </li>
-        `
-    }
+const response = await fetch(url)
+const data = await response.json()
 
-    contenedor.innerHTML = resultado
+const tabla = document.getElementById("tablaAdmins")
+
+tabla.innerHTML = ""
+
+data.forEach(admin => {
+
+tabla.innerHTML += `
+
+<tr>
+
+<td>${admin.id_admin}</td>
+<td>${admin.id_persona}</td>
+
+<td>
+
+<button class="edit"
+onclick="editarAdmin(${admin.id_admin},${admin.id_persona})">
+Editar
+</button>
+
+<button class="delete"
+onclick="eliminarAdmin(${admin.id_admin})">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
 }
 
-fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        CargaData(data)
-    })
-    .catch(error => {
-        console.log(error)
-    })
+function editarAdmin(id_admin,id_persona){
+
+window.location.href =
+`administrador_put.html?id_admin=${id_admin}&id_persona=${id_persona}`
+
+}
+
+async function eliminarAdmin(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarAdministradores()
+
+}
+
+cargarAdministradores()

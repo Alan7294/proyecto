@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Personas</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* MENU LATERAL */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Personas</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Personas</h1>
+
+<div class="card">
+
+<h3>Registrar Persona</h3>
+
+<form id="formPersona">
+
+<input type="text" id="nombre" placeholder="Nombre" required>
+
+<input type="text" id="apellido_pat" placeholder="Apellido Paterno" required>
+
+<input type="text" id="apellido_mat" placeholder="Apellido Materno">
+
+<input type="number" id="ci" placeholder="CI" required>
+
+<input type="email" id="correo" placeholder="Correo" required>
+
+<input type="date" id="fecha_nacimiento">
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Personas</h3>
+
+<button onclick="cargarPersonas()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Apellido Pat</th>
+<th>Apellido Mat</th>
+<th>CI</th>
+<th>Correo</th>
+<th>Fecha Nacimiento</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaPersonas"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/persona"
+
+async function cargarPersonas(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaPersonas")
+
+tabla.innerHTML=""
+
+data.forEach(persona=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${persona.id_persona}</td>
+<td>${persona.nombre}</td>
+<td>${persona.apellido_pat}</td>
+<td>${persona.apellido_mat ?? ""}</td>
+<td>${persona.ci}</td>
+<td>${persona.correo}</td>
+<td>${persona.fecha_nacimiento ?? ""}</td>
+
+<td>
+
+<button onclick="eliminarPersona(${persona.id_persona})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formPersona").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const nombre=document.getElementById("nombre").value
+const apellido_pat=document.getElementById("apellido_pat").value
+const apellido_mat=document.getElementById("apellido_mat").value
+const ci=document.getElementById("ci").value
+const correo=document.getElementById("correo").value
+const fecha_nacimiento=document.getElementById("fecha_nacimiento").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre:nombre,
+apellido_pat:apellido_pat,
+apellido_mat:apellido_mat,
+ci:ci,
+correo:correo,
+fecha_nacimiento:fecha_nacimiento
+})
+
+})
+
+cargarPersonas()
+
+})
+
+async function eliminarPersona(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarPersonas()
+
+}
+
+cargarPersonas()
+
+</script>
+
+</body>
+</html>

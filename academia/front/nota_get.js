@@ -1,30 +1,47 @@
 const url = "http://127.0.0.1:8000/nota"
+
 const contenedor = document.getElementById('data')
 
-const CargaData = (datos) => {
-    let resultado = ""
-
-    for (let i = 0; i < datos.length; i++) {
-        resultado += `
-        <li>
-            <p>id nota: ${datos[i].id_nota}</p>
-            <p>id inscripcion: ${datos[i].id_inscripcion}</p>
-            <p>Nota: ${datos[i].nota}</p>
-            <p>Fecha de registro: ${datos[i].fecha_registro}</p>
-            <p>docente: ${datos[i].id_docente}</p>
-            <hr>
-        </li>
-        `
-    }
-
-    contenedor.innerHTML = resultado
-}
+function cargarNotas(){
 
 fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        CargaData(data)
-    })
-    .catch(error => {
-        console.log(error)
-    })
+
+.then(response => response.json())
+
+.then(datos => {
+
+let resultado = ""
+
+datos.forEach(nota => {
+
+resultado += `
+
+<li>
+
+<p><b>ID Nota:</b> ${nota.id_nota}</p>
+<p><b>ID Inscripción:</b> ${nota.id_inscripcion}</p>
+<p><b>Nota:</b> ${nota.nota}</p>
+<p><b>Fecha Registro:</b> ${nota.fecha_registro}</p>
+<p><b>ID Docente:</b> ${nota.id_docente}</p>
+
+<hr>
+
+</li>
+
+`
+
+})
+
+contenedor.innerHTML = resultado
+
+})
+
+.catch(error => {
+
+console.log(error)
+
+})
+
+}
+
+cargarNotas()

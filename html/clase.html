@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Clases</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+.update{
+background:#16a34a;
+}
+
+.update:hover{
+background:#15803d;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Clases</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Clases</h1>
+
+<div class="card">
+
+<h3>Registrar Clase</h3>
+
+<form id="formClase">
+
+<input type="number" id="id_materia" placeholder="ID Materia" required>
+
+<input type="number" id="id_docente" placeholder="ID Docente" required>
+
+<input type="text" id="periodo" placeholder="Periodo (Ej: 2025-1)" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Clases</h3>
+
+<button onclick="cargarClases()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Clase</th>
+<th>ID Materia</th>
+<th>ID Docente</th>
+<th>Periodo</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaClases"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000"
+
+async function cargarClases(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaClases")
+
+tabla.innerHTML=""
+
+data.forEach(clase=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${clase.id_clase}</td>
+<td>${clase.id_materia}</td>
+<td>${clase.id_docente}</td>
+<td>${clase.periodo}</td>
+
+<td>
+
+<button onclick="editarClase(${clase.id_clase},${clase.id_materia},${clase.id_docente},'${clase.periodo}')" class="update">
+Editar
+</button>
+
+<button onclick="eliminarClase(${clase.id_clase})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formClase").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const id_materia=document.getElementById("id_materia").value
+const id_docente=document.getElementById("id_docente").value
+const periodo=document.getElementById("periodo").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_materia:id_materia,
+id_docente:id_docente,
+periodo:periodo
+})
+
+})
+
+document.getElementById("formClase").reset()
+
+cargarClases()
+
+})
+
+async function eliminarClase(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarClases()
+
+}
+
+function editarClase(id,id_materia,id_docente,periodo){
+
+const nuevoMateria=prompt("Nuevo ID Materia:",id_materia)
+const nuevoDocente=prompt("Nuevo ID Docente:",id_docente)
+const nuevoPeriodo=prompt("Nuevo periodo:",periodo)
+
+fetch(url+"/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_materia:nuevoMateria,
+id_docente:nuevoDocente,
+periodo:nuevoPeriodo
+})
+
+}).then(()=>cargarClases())
+
+}
+
+cargarClases()
+
+</script>
+
+</body>
+</html>

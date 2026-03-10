@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Tipos de Usuario</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* MENU LATERAL */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Personas</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+<a href="#">Notas</a>
+<a href="#">Tipos Usuario</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Tipos de Usuario</h1>
+
+<div class="card">
+
+<h3>Registrar Tipo de Usuario</h3>
+
+<form id="formTipo">
+
+<input type="text" id="nombre_tipo" placeholder="Nombre del tipo de usuario" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Tipos de Usuario</h3>
+
+<button onclick="cargarTipos()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre Tipo</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaTipos"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/tipos_usuario"
+
+async function cargarTipos(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaTipos")
+
+tabla.innerHTML=""
+
+data.forEach(tipo=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${tipo.id_tipo}</td>
+<td>${tipo.nombre_tipo}</td>
+
+<td>
+
+<button onclick="eliminarTipo(${tipo.id_tipo})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formTipo").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const nombre_tipo=document.getElementById("nombre_tipo").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre_tipo:nombre_tipo
+})
+
+})
+
+cargarTipos()
+
+})
+
+async function eliminarTipo(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarTipos()
+
+}
+
+cargarTipos()
+
+</script>
+
+</body>
+</html>

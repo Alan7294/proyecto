@@ -1,20 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Administrador</title>
+<meta charset="UTF-8">
+<title>Registrar Administrador</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+padding:40px;
+}
+
+.card{
+background:white;
+padding:30px;
+width:400px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+</style>
+
 </head>
+
 <body>
-    <form name="formularioData" action="" method="post">
-        <h1>Registro de Administrador</h1>
-        <label for="id_persona">ID Persona:</label>
-        <input id="id_persona" name="id_persona" type="number"><br><br>
 
-        <input id="btn_guardar" type="submit" value="Guardar">
-        <input type="reset" value="Cancelar">
-    </form>
+<div class="card">
 
-    <script src="administrador_post.js"></script>
+<h2>Registrar Administrador</h2>
+
+<form name="formularioData">
+
+<label>ID Persona</label>
+<input id="id_persona" type="number" required>
+
+<button type="submit">Guardar</button>
+
+</form>
+
+<br>
+
+<a href="administrador_get.html">
+<button>Volver</button>
+</a>
+
+</div>
+
+<script src="administrador_post.js"></script>
+
 </body>
 </html>

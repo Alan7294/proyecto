@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Carreras</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* MENU LATERAL */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+.update{
+background:#16a34a;
+}
+
+.update:hover{
+background:#15803d;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Carreras</h1>
+
+<div class="card">
+
+<h3>Registrar Carrera</h3>
+
+<form id="formCarrera">
+
+<input type="text" id="nombre_carrera" placeholder="Nombre de la carrera" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Carreras</h3>
+
+<button onclick="cargarCarreras()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Carrera</th>
+<th>Nombre Carrera</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaCarreras"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/carreras"
+
+async function cargarCarreras(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaCarreras")
+
+tabla.innerHTML=""
+
+data.forEach(carrera=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${carrera.id_carrera}</td>
+<td>${carrera.nombre_carrera}</td>
+
+<td>
+
+<button onclick="editarCarrera(${carrera.id_carrera},'${carrera.nombre_carrera}')" class="update">
+Editar
+</button>
+
+<button onclick="eliminarCarrera(${carrera.id_carrera})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formCarrera").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const nombre=document.getElementById("nombre_carrera").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre_carrera:nombre
+})
+
+})
+
+document.getElementById("formCarrera").reset()
+
+cargarCarreras()
+
+})
+
+async function eliminarCarrera(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarCarreras()
+
+}
+
+function editarCarrera(id,nombre){
+
+const nuevo=prompt("Nuevo nombre de la carrera:",nombre)
+
+if(nuevo){
+
+fetch(url+"/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre_carrera:nuevo
+})
+
+}).then(()=>cargarCarreras())
+
+}
+
+}
+
+cargarCarreras()
+
+</script>
+
+</body>
+</html>

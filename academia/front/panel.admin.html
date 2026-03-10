@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Panel Administrador</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:12px;
+margin:8px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:40px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card h3{
+margin-bottom:10px;
+}
+
+.card a{
+text-decoration:none;
+color:white;
+background:#2563eb;
+padding:10px 20px;
+border-radius:5px;
+display:inline-block;
+margin-top:10px;
+}
+
+.card a:hover{
+background:#1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="panel_admin.html">Dashboard</a>
+<a href="persona_get.html">Personas</a>
+<a href="usuario_get.html">Usuarios</a>
+<a href="administrador_get.html">Administradores</a>
+<a href="reportes.html">Reportes</a>
+
+</div>
+
+<div class="main">
+
+<h1>Panel Administrador</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card">
+<h3>Administradores</h3>
+<p>Gestionar administradores</p>
+<a href="administrador_get.html">Entrar</a>
+</div>
+
+<div class="card">
+<h3>Personas</h3>
+<p>Lista de personas registradas</p>
+<a href="persona_get.html">Entrar</a>
+</div>
+
+<div class="card">
+<h3>Usuarios</h3>
+<p>Control de usuarios</p>
+<a href="usuario_get.html">Entrar</a>
+</div>
+
+<div class="card">
+<h3>Reportes</h3>
+<p>Reportes del sistema</p>
+<a href="reportes.html">Ver</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

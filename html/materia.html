@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Materias</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* MENU LATERAL */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Materias</h1>
+
+<div class="card">
+
+<h3>Registrar Materia</h3>
+
+<form id="formMateria">
+
+<input type="text" id="nombre" placeholder="Nombre de la materia" required>
+
+<input type="text" id="descripcion" placeholder="Descripción" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Materias</h3>
+
+<button onclick="cargarMaterias()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaMaterias"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/materia"
+
+async function cargarMaterias(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaMaterias")
+
+tabla.innerHTML=""
+
+data.forEach(materia=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${materia.id_materia}</td>
+<td>${materia.nombre}</td>
+<td>${materia.descripcion}</td>
+
+<td>
+
+<button onclick="eliminarMateria(${materia.id_materia})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formMateria").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const nombre=document.getElementById("nombre").value
+const descripcion=document.getElementById("descripcion").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre:nombre,
+descripcion:descripcion
+})
+
+})
+
+cargarMaterias()
+
+})
+
+async function eliminarMateria(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarMaterias()
+
+}
+
+cargarMaterias()
+
+</script>
+
+</body>
+</html>

@@ -1,16 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<title>Lista Administradores</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:10px;
+margin:5px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+color:white;
+cursor:pointer;
+}
+
+.update{
+background:#2563eb;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.edit{
+background:#f59e0b;
+}
+
+</style>
+
 </head>
+
 <body>
-    <div id="listado">
-    <ul id="data">
-    </ul>
-    </div>
-    <script src = "administrador_get.js"></script>
-    
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="administrador_get.html">Administradores</a>
+<a href="administrador_post.html">Registrar Administrador</a>
+
+</div>
+
+<div class="main">
+
+<h1>Lista de Administradores</h1>
+
+<div class="card">
+
+<button class="update" onclick="cargarAdministradores()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Admin</th>
+<th>ID Persona</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaAdmins"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="administrador_get.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Notas</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* MENU */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+<a href="#">Notas</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Notas</h1>
+
+<div class="card">
+
+<h3>Registrar Nota</h3>
+
+<form id="formNota">
+
+<input type="number" id="id_inscripcion" placeholder="ID Inscripción" required>
+
+<input type="number" id="id_docente" placeholder="ID Docente" required>
+
+<input type="number" step="0.01" id="nota" placeholder="Nota" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Notas</h3>
+
+<button onclick="cargarNotas()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID</th>
+<th>ID Inscripción</th>
+<th>ID Docente</th>
+<th>Nota</th>
+<th>Fecha</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaNotas"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/nota"
+
+async function cargarNotas(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaNotas")
+
+tabla.innerHTML=""
+
+data.forEach(nota=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${nota.id_nota}</td>
+<td>${nota.id_inscripcion}</td>
+<td>${nota.id_docente}</td>
+<td>${nota.nota}</td>
+<td>${nota.fecha_registro}</td>
+
+<td>
+
+<button onclick="eliminarNota(${nota.id_nota})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formNota").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const id_inscripcion=document.getElementById("id_inscripcion").value
+const id_docente=document.getElementById("id_docente").value
+const nota=document.getElementById("nota").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_inscripcion:id_inscripcion,
+id_docente:id_docente,
+nota:nota
+})
+
+})
+
+cargarNotas()
+
+})
+
+async function eliminarNota(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarNotas()
+
+}
+
+cargarNotas()
+
+</script>
+
+</body>
+</html>

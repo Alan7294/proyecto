@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Materias</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#0f766e;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:12px;
+margin:8px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#115e59;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:40px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+color:white;
+cursor:pointer;
+}
+
+.update{
+background:#2563eb;
+}
+
+.delete{
+background:#dc2626;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Docente</h2>
+
+<a href="panel_docente.html">Dashboard</a>
+<a href="materia_get.html">Materias</a>
+<a href="nota_get.html">Notas</a>
+<a href="inscripcion_get.html">Alumnos</a>
+
+</div>
+
+<div class="main">
+
+<h1>Lista de Materias</h1>
+
+<div class="card">
+
+<button class="update" onclick="cargarMaterias()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Materia</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaMaterias"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="materia_get.js"></script>
+
+</body>
+</html>

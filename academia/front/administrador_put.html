@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Editar Administrador</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+padding:40px;
+}
+
+.card{
+background:white;
+padding:30px;
+width:400px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Editar Administrador</h2>
+
+<form id="formEditar">
+
+<label>ID Administrador</label>
+<input id="id_admin" type="number" readonly>
+
+<label>ID Persona</label>
+<input id="id_persona" type="number" required>
+
+<button type="submit">Actualizar</button>
+
+</form>
+
+<br>
+
+<a href="administrador_get.html">
+<button>Volver</button>
+</a>
+
+</div>
+
+<script src="administrador_put.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Gestión de Docentes</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:5px 0;
+color:white;
+text-decoration:none;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+.update{
+background:#16a34a;
+}
+
+.update:hover{
+background:#15803d;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Clases</a>
+
+</div>
+
+<div class="main">
+
+<h1>Gestión de Docentes</h1>
+
+<div class="card">
+
+<h3>Registrar Docente</h3>
+
+<form id="formDocente">
+
+<input type="number" id="id_persona" placeholder="ID Persona" required>
+
+<input type="number" id="id_especialidad" placeholder="ID Especialidad" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Docentes</h3>
+
+<button onclick="cargarDocentes()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Docente</th>
+<th>ID Persona</th>
+<th>ID Especialidad</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaDocentes"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/docente"
+
+async function cargarDocentes(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaDocentes")
+
+tabla.innerHTML=""
+
+data.forEach(docente=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${docente.id_docente}</td>
+<td>${docente.id_persona}</td>
+<td>${docente.id_especialidad}</td>
+
+<td>
+
+<button onclick="editarDocente(${docente.id_docente},${docente.id_persona},${docente.id_especialidad})" class="update">
+Editar
+</button>
+
+<button onclick="eliminarDocente(${docente.id_docente})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formDocente").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const id_persona=document.getElementById("id_persona").value
+const id_especialidad=document.getElementById("id_especialidad").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_persona:id_persona,
+id_especialidad:id_especialidad
+})
+
+})
+
+document.getElementById("formDocente").reset()
+
+cargarDocentes()
+
+})
+
+async function eliminarDocente(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarDocentes()
+
+}
+
+function editarDocente(id,id_persona,id_especialidad){
+
+const nuevaPersona=prompt("Nuevo ID Persona:",id_persona)
+const nuevaEspecialidad=prompt("Nuevo ID Especialidad:",id_especialidad)
+
+fetch(url+"/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_persona:nuevaPersona,
+id_especialidad:nuevaEspecialidad
+})
+
+}).then(()=>cargarDocentes())
+
+}
+
+cargarDocentes()
+
+</script>
+
+</body>
+</html>

@@ -1,27 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<title>Lista de Usuarios</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:10px;
+margin:5px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+#buscador{
+width:100%;
+padding:10px;
+margin-bottom:20px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+li{
+list-style:none;
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+</style>
+
 </head>
+
 <body>
-    <form name= "formularioData" action="" method="post">
-        <h1>Registro de Personas</h1>
-        <label for="">nombre:</label>
-        <input id= "nombre_persona" name= "nombre_persona" type="text"><br><br>
-        <label for="">Apellido Paterno:</label>
-        <input id="apellido_pat" name="apellido_pat" type="text"><br><br>
-        <label for="">Apellido Materno:</label>
-        <input id="apellido_mat" name="apellido_mat" type="text"><br><br>
-        <label for="">CI:</label>
-        <input id="ci" name="ci" type="number"><br><br>
-        <label for="">Correo Electronico:</label>
-        <input id="correo" name="correo" type="text"><br><br>
-        <label for="">Fecha de Nacimiento:</label>
-        <input id="fecha_nacimiento" name="fecha_nacimiento" type="text"><br><br>
-        <input id="btn_guardar" type="submit" value="Guardar">
-        <input type="submit" value="Cancelar">
-        <script src="persona_post.js"></script>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="persona_get.html">Personas</a>
+<a href="persona_post.html">Registrar Persona</a>
+<a href="usuario_get.html">Usuarios</a>
+<a href="usuario_post.html">Registrar Usuario</a>
+
+</div>
+
+<div class="main">
+
+<h1>Lista de Usuarios</h1>
+
+<div class="card">
+
+<button onclick="cargarUsuarios()">Actualizar Lista</button>
+
+<input type="text" id="buscador" placeholder="Buscar usuario o ID persona">
+
+<ul id="data"></ul>
+
+</div>
+
+</div>
+
+<script src="usuario_get.js"></script>
+
 </body>
 </html>

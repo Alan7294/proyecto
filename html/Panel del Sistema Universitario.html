@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sistema Universitario</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f0f2f5;
+    margin:0;
+}
+
+header{
+    background:#002b5b;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:20px;
+    padding:30px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.card button{
+    padding:10px 20px;
+    border:none;
+    background:#0056b3;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.card button:hover{
+    background:#003f80;
+}
+
+footer{
+    text-align:center;
+    padding:10px;
+    background:#002b5b;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Sistema de Gestión Universitaria</h1>
+<p>Panel Administrativo</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Administrador</h3>
+<button onclick="abrir('administrador')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Alumno</h3>
+<button onclick="abrir('alumno')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Carrera</h3>
+<button onclick="abrir('carrera')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Clase</h3>
+<button onclick="abrir('clase')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Docente</h3>
+<button onclick="abrir('docente')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Especialidad</h3>
+<button onclick="abrir('especialidad')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Inscripción</h3>
+<button onclick="abrir('inscripcion')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Materia</h3>
+<button onclick="abrir('materia')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Nota</h3>
+<button onclick="abrir('nota')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Persona</h3>
+<button onclick="abrir('persona')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Tipo</h3>
+<button onclick="abrir('tipo')">Ver</button>
+</div>
+
+<div class="card">
+<h3>Usuario</h3>
+<button onclick="abrir('usuario')">Ver</button>
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Sistema Universitario</p>
+</footer>
+
+<script>
+
+function abrir(modulo){
+    alert("Abrir módulo: " + modulo)
+    // aquí luego puedes conectar con tu API FastAPI
+}
+
+</script>
+
+</body>
+</html>

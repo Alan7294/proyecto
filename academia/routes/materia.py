@@ -32,7 +32,7 @@ async def listar_materias(conn=Depends(get_conexion)):
             return materias
     except Exception as e:
         print(f"Error al listar materias: {e}")
-        raise HTTPException(status_code=400, detail="Error al consultar materias")
+        raise HTTPException(status_code=400, detail=f"Error al consultar materias: {str(e)}")
 
 @router.get("/{id_materia}")
 async def obtener_materia(id_materia: int, conn=Depends(get_conexion)):

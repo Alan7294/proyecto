@@ -1,16 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<title>Lista de Inscripciones</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:10px;
+margin:5px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+li{
+list-style:none;
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+</style>
+
 </head>
+
 <body>
-    <div id="listado">
-    <ul id="data">
-    </ul>
-    </div>
-    <script src = "inscripcion_get.js"></script>
-    
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="inscripcion_get.html">Inscripciones</a>
+<a href="inscripcion_post.html">Registrar Inscripción</a>
+
+</div>
+
+<div class="main">
+
+<h1>Lista de Inscripciones</h1>
+
+<div class="card">
+
+<button onclick="cargarInscripciones()">Actualizar Lista</button>
+
+<div id="listado">
+<ul id="data"></ul>
+</div>
+
+</div>
+
+</div>
+
+<script src="inscripcion_get.js"></script>
+
 </body>
 </html>

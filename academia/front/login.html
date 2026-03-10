@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Login del Sistema</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#f4f6f9;
+}
+
+.login-container{
+background:white;
+padding:35px;
+width:320px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.login-container h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+label{
+font-size:14px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e40af;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+<h2>Ingreso al Sistema</h2>
+
+<form id="formLogin">
+
+<label>Usuario</label>
+<input type="text" id="usuario" placeholder="Ingrese su usuario" required>
+
+<label>Contraseña</label>
+<input type="password" id="password" placeholder="Ingrese su contraseña" required>
+
+<label>Tipo de Usuario</label>
+<select id="tipo_usuario" required>
+
+<option value="">Seleccione tipo</option>
+<option value="1">Administrador</option>
+<option value="2">Maestro</option>
+<option value="3">Alumno</option>
+
+</select>
+
+<button type="submit">Ingresar</button>
+
+</form>
+
+</div>
+
+<script src="login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Panel Administradores</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#1e293b;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+text-align:center;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:10px;
+margin:5px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#334155;
+}
+
+/* CONTENIDO */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.header{
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+margin-bottom:20px;
+}
+
+input{
+padding:8px;
+margin-right:10px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 15px;
+border:none;
+border-radius:5px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#2563eb;
+color:white;
+}
+
+.delete{
+background:#dc2626;
+}
+
+.delete:hover{
+background:#b91c1c;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Sistema U</h2>
+
+<a href="#">Dashboard</a>
+<a href="#">Administradores</a>
+<a href="#">Alumnos</a>
+<a href="#">Docentes</a>
+<a href="#">Carreras</a>
+<a href="#">Materias</a>
+<a href="#">Inscripciones</a>
+
+</div>
+
+<div class="main">
+
+<div class="header">
+<h1>Gestión de Administradores</h1>
+</div>
+
+<div class="card">
+
+<h3>Registrar Administrador</h3>
+
+<form id="formAdmin">
+
+<input type="number" id="id_persona" placeholder="ID Persona" required>
+
+<button type="submit">Registrar</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h3>Lista de Administradores</h3>
+
+<button onclick="cargarAdministradores()">Actualizar Lista</button>
+
+<table>
+
+<thead>
+<tr>
+<th>ID Admin</th>
+<th>ID Persona</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaAdmins"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+const url="http://127.0.0.1:8000/administrador"
+
+async function cargarAdministradores(){
+
+const response=await fetch(url)
+
+const data=await response.json()
+
+const tabla=document.getElementById("tablaAdmins")
+
+tabla.innerHTML=""
+
+data.forEach(admin=>{
+
+tabla.innerHTML+=`
+
+<tr>
+<td>${admin.id_admin}</td>
+<td>${admin.id_persona}</td>
+
+<td>
+
+<button onclick="eliminarAdmin(${admin.id_admin})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
+}
+
+document.getElementById("formAdmin").addEventListener("submit",async(e)=>{
+
+e.preventDefault()
+
+const id_persona=document.getElementById("id_persona").value
+
+await fetch(url,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+id_persona:id_persona
+})
+
+})
+
+cargarAdministradores()
+
+})
+
+async function eliminarAdmin(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarAdministradores()
+
+}
+
+cargarAdministradores()
+
+</script>
+
+</body>
+</html>

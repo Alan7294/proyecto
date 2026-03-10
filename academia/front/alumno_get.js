@@ -1,28 +1,49 @@
 const url = "http://127.0.0.1:8000/alumno"
-const contenedor = document.getElementById('data')
 
-const CargaData = (datos) => {
-    let resultado = ""
+async function cargarAlumnos(){
 
-    for (let i = 0; i < datos.length; i++) {
-        resultado += `
-        <li>
-            <p>id Alumno: ${datos[i].id_alumno}</p>
-            <p>id Persona: ${datos[i].id_persona}</p>
-            <p>id carrera: ${datos[i].carrera_alumno}</p>
-            <hr>
-        </li>
-        `
-    }
+const response = await fetch(url)
 
-    contenedor.innerHTML = resultado
+const data = await response.json()
+
+const tabla = document.getElementById("tablaAlumnos")
+
+tabla.innerHTML=""
+
+data.forEach(alumno=>{
+
+tabla.innerHTML+=`
+
+<tr>
+
+<td>${alumno.id_alumno}</td>
+<td>${alumno.id_persona}</td>
+<td>${alumno.carrera_alumno}</td>
+
+<td>
+
+<button onclick="eliminarAlumno(${alumno.id_alumno})" class="delete">
+Eliminar
+</button>
+
+</td>
+
+</tr>
+
+`
+
+})
+
 }
 
-fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        CargaData(data)
-    })
-    .catch(error => {
-        console.log(error)
-    })
+async function eliminarAlumno(id){
+
+await fetch(url+"/"+id,{
+method:"DELETE"
+})
+
+cargarAlumnos()
+
+}
+
+cargarAlumnos()

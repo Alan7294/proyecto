@@ -1,30 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Notas</title>
+<meta charset="UTF-8">
+<title>Registro de Nota</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+padding:40px;
+}
+
+.card{
+background:white;
+padding:30px;
+width:400px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+</style>
+
 </head>
+
 <body>
-    <form name="formularioData" action="" method="post">
-        <h1>Registro de Nota</h1>
-        
-        <label for="id_inscripcion">ID Inscripción:</label>
-        <input id="id_inscripcion" name="id_inscripcion" type="number"><br><br>
 
-        <label for="nota">Nota (0-100):</label>
-        <input id="nota" name="nota" type="number" step="0.01" min="0" max="100"><br><br>
+<div class="card">
 
-        <label for="fecha_registro">Fecha de Registro:</label>
-        <input id="fecha_registro" name="fecha_registro" type="date"><br><br>
+<h2>Registro de Nota</h2>
 
-        <label for="id_docente">ID Docente:</label>
-        <input id="id_docente" name="id_docente" type="number"><br><br>
+<form name="formularioData">
 
-        <input id="btn_guardar" type="submit" value="Guardar">
-        <input type="reset" value="Cancelar">
-    </form>
+<label>ID Inscripción</label>
+<input id="id_inscripcion" type="number" required>
 
-    <script src="notas_post.js"></script>
+<label>Nota</label>
+<input id="nota" type="number" step="0.01" min="0" max="100" required>
+
+<label>ID Docente</label>
+<input id="id_docente" type="number" required>
+
+<button type="submit">Guardar</button>
+
+</form>
+
+<br>
+
+<a href="nota_get.html">
+<button>Volver a la lista</button>
+</a>
+
+</div>
+
+<script src="nota_post.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Panel Docente</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+display:flex;
+background:#f4f6f9;
+}
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#0f766e;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:12px;
+margin:8px 0;
+border-radius:5px;
+}
+
+.sidebar a:hover{
+background:#115e59;
+}
+
+.main{
+flex:1;
+padding:40px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card a{
+text-decoration:none;
+color:white;
+background:#0f766e;
+padding:10px 20px;
+border-radius:5px;
+display:inline-block;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Docente</h2>
+
+<a href="panel_docente.html">Dashboard</a>
+<a href="materia_get.html">Materias</a>
+<a href="nota_get.html">Notas</a>
+<a href="inscripcion_get.html">Alumnos</a>
+
+</div>
+
+<div class="main">
+
+<h1>Panel Docente</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card">
+<h3>Materias</h3>
+<p>Ver materias asignadas</p>
+<a href="materia_get.html">Entrar</a>
+</div>
+
+<div class="card">
+<h3>Notas</h3>
+<p>Registrar y ver notas</p>
+<a href="nota_get.html">Entrar</a>
+</div>
+
+<div class="card">
+<h3>Alumnos</h3>
+<p>Alumnos inscritos</p>
+<a href="inscripcion_get.html">Entrar</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
